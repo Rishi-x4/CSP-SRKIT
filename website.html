@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lost and Found — SRKIT</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;background:#f8fafc;min-height:100vh;}
+button{font-family:'Poppins',sans-serif;cursor:pointer;}
+input,select,textarea{font-family:'Poppins',sans-serif;}
+.hidden{display:none!important;}
+
+/* ── NAVBAR ── */
+#navbar{background:#1e3a8a;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+.nav-wrap{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:60px;}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.nav-logo-name{color:#fff;font-weight:800;font-size:16px;line-height:1.1;}
+.nav-logo-sub{color:#93c5fd;font-size:10px;letter-spacing:.08em;}
+.nav-right{display:flex;gap:8px;align-items:center;}
+.btn-orange{background:#f97316;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;}
+.btn-ghost{background:rgba(255,255,255,.1);border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;}
+.btn-admin{background:transparent;border:1px solid #fbbf24;color:#fbbf24;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;}
+#user-menu{position:absolute;right:20px;top:64px;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:8px;min-width:180px;z-index:200;}
+.menu-item{display:block;width:100%;padding:10px 14px;border:none;background:none;text-align:left;font-size:14px;border-radius:8px;color:#374151;cursor:pointer;font-family:'Poppins',sans-serif;}
+.menu-item:hover{background:#f1f5f9;}
+.menu-item.danger{color:#dc2626;}
+.menu-divider{border:none;border-top:1px solid #f1f5f9;margin:6px 0;}
+
+/* ── BUTTONS ── */
+.btn-primary{background:#1e3a8a;color:#fff;border:none;padding:11px 22px;border-radius:8px;font-size:13px;font-weight:600;}
+.btn-primary:hover{background:#1d4ed8;}
+.btn-danger{background:#dc2626;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;}
+.btn-success{background:#16a34a;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;}
+.btn-outline{background:#fff;color:#1e3a8a;border:1.5px solid #1e3a8a;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;}
+.btn-gray{background:#f1f5f9;color:#374151;border:1px solid #e2e8f0;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;}
+.btn-full{width:100%;padding:13px;border-radius:8px;border:none;font-size:14px;font-weight:700;}
+.btn-gradient{background:linear-gradient(135deg,#f97316,#fbbf24);color:#0f172a;}
+.btn-navy{background:#1e3a8a;color:#fff;}
+
+/* ── INPUTS ── */
+.inp{width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;}
+.inp:focus{border-color:#1e3a8a;}
+.lbl{font-size:12px;font-weight:700;color:#475569;letter-spacing:.06em;display:block;margin-bottom:5px;}
+.form-group{margin-bottom:16px;}
+textarea.inp{resize:vertical;min-height:80px;}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+
+/* ── BADGES ── */
+.badge-lost{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:.1em;background:#fee2e2;color:#dc2626;}
+.badge-found{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:.1em;background:#dcfce7;color:#16a34a;}
+.badge-claimed{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:.1em;background:#fef3c7;color:#d97706;}
+
+/* ── ALERT ── */
+.alert{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;}
+.alert-error{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;}
+.alert-info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;}
+.alert-success{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;}
+
+/* ── LANDING ── */
+#screen-landing{min-height:100vh;background:linear-gradient(135deg,#0f172a,#1e3a8a,#1d4ed8);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;}
+.landing-icon{width:72px;height:72px;border-radius:20px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 16px;}
+.landing h1{color:#fff;font-size:clamp(26px,5vw,40px);font-weight:900;margin-bottom:8px;}
+.landing-sub{color:#93c5fd;font-size:14px;margin-bottom:4px;}
+.landing-desc{color:#bfdbfe;font-size:13px;max-width:380px;margin:0 auto 28px;line-height:1.6;}
+.landing-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+
+/* ── AUTH ── */
+.auth-wrap{min-height:100vh;background:#f8fafc;display:flex;align-items:center;justify-content:center;padding:24px;}
+.auth-box{background:#fff;border-radius:20px;padding:36px;width:100%;max-width:440px;box-shadow:0 4px 24px rgba(0,0,0,.08);}
+.auth-icon{font-size:36px;text-align:center;margin-bottom:8px;}
+.auth-title{font-size:22px;font-weight:800;color:#0f172a;text-align:center;margin-bottom:4px;}
+.auth-sub{font-size:13px;color:#64748b;text-align:center;margin-bottom:24px;}
+.phone-row{display:flex;gap:8px;align-items:center;}
+.phone-prefix{background:#f1f5f9;border:1.5px solid #cbd5e1;border-radius:8px;padding:10px 12px;font-size:14px;color:#475569;font-weight:700;white-space:nowrap;}
+.type-row{display:flex;gap:8px;}
+.type-btn{flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;}
+.type-btn.active{background:#eff6ff;border:2px solid #1e3a8a;color:#1e3a8a;}
+.type-btn.inactive{background:#fff;border:2px solid #e2e8f0;color:#64748b;}
+
+/* ── HOME BANNER ── */
+.home-banner{background:linear-gradient(135deg,#1e3a8a,#1d4ed8);padding:28px 20px;margin-bottom:24px;}
+.banner-inner{max-width:1100px;margin:0 auto;}
+.banner-title{color:#fff;font-weight:800;font-size:clamp(18px,4vw,26px);margin-bottom:4px;}
+.banner-sub{color:#bfdbfe;font-size:13px;margin-bottom:16px;}
+.banner-stats{display:flex;gap:12px;flex-wrap:wrap;}
+.stat-box{background:rgba(255,255,255,.1);border-radius:10px;padding:10px 16px;display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.15);}
+.stat-num{font-size:20px;font-weight:900;color:#fff;}
+.stat-lbl{font-size:12px;color:#bfdbfe;}
+
+/* ── FILTERS ── */
+.filter-bar{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:20px;}
+.filter-search{width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;margin-bottom:10px;font-family:'Poppins',sans-serif;outline:none;}
+.filter-chips{display:flex;gap:6px;flex-wrap:wrap;}
+.chip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #e2e8f0;background:#fff;color:#374151;}
+.chip.active-all{border-color:#1e3a8a;background:#eff6ff;color:#1e3a8a;}
+.chip.active-lost{border-color:#dc2626;background:#fef2f2;color:#dc2626;}
+.chip.active-found{border-color:#16a34a;background:#f0fdf4;color:#16a34a;}
+.chip.active-cat{border-color:#1e3a8a;background:#1e3a8a;color:#fff;}
+
+/* ── POST GRID ── */
+.post-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;}
+.post-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.post-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.1);}
+.post-top-bar{position:absolute;top:0;left:0;right:0;height:4px;}
+.post-thumb{width:100%;height:120px;border-radius:8px;object-fit:cover;margin-bottom:12px;}
+.post-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.post-icon{font-size:24px;}
+.post-badges{display:flex;gap:6px;flex-wrap:wrap;}
+.post-title{font-weight:700;font-size:15px;color:#0f172a;margin-bottom:4px;}
+.post-loc{font-size:12px;color:#64748b;margin-bottom:8px;}
+.post-desc{font-size:13px;color:#475569;line-height:1.5;margin-bottom:10px;}
+.post-contact{border-radius:8px;padding:8px 10px;margin-bottom:10px;}
+.post-contact.lost{background:#fef2f2;border:1px solid #fecaca;}
+.post-contact.found{background:#f0fdf4;border:1px solid #bbf7d0;}
+.contact-label{font-size:11px;color:#64748b;margin-bottom:2px;}
+.contact-phone{font-size:13px;font-weight:700;color:#0f172a;}
+.contact-name{font-size:11px;color:#64748b;}
+.post-footer{display:flex;justify-content:space-between;align-items:center;}
+.post-expiry{font-size:11px;color:#94a3b8;}
+.post-expiry.soon{color:#dc2626;}
+.post-actions{display:flex;gap:6px;}
+.empty-state{text-align:center;padding:60px 20px;color:#94a3b8;}
+.empty-icon{font-size:48px;margin-bottom:12px;}
+.empty-title{font-weight:700;font-size:18px;color:#475569;margin-bottom:6px;}
+.empty-desc{font-size:14px;}
+
+/* ── MODAL ── */
+#modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:#fff;border-radius:16px;padding:28px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.modal-title{font-weight:700;font-size:18px;color:#0f172a;}
+.modal-close{background:#f1f5f9;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}
+
+/* ── REPORT FORM ── */
+.report-wrap{max-width:580px;margin:0 auto;padding:28px 20px;}
+.type-toggle{display:flex;gap:10px;margin-bottom:20px;}
+.type-opt{flex:1;padding:12px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
+.type-opt.lost.active{background:#fef2f2;border:2px solid #dc2626;color:#dc2626;}
+.type-opt.found.active{background:#f0fdf4;border:2px solid #16a34a;color:#16a34a;}
+.type-opt.inactive{background:#fff;border:2px solid #e2e8f0;color:#64748b;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.photo-drop{border:2px dashed #cbd5e1;border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:#f8fafc;}
+.photo-drop-icon{font-size:28px;margin-bottom:4px;}
+.photo-drop-text{font-size:13px;color:#64748b;}
+.photo-preview{max-height:120px;border-radius:6px;}
+.form-btns{display:flex;gap:10px;margin-top:8px;}
+
+/* ── MY POSTS ── */
+.section-wrap{max-width:900px;margin:0 auto;padding:28px 20px;}
+.section-title{font-weight:800;font-size:22px;color:#0f172a;margin-bottom:20px;}
+.claims-box{margin-top:12px;background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:10px;}
+.claims-title{font-size:12px;font-weight:700;color:#92400e;margin-bottom:6px;}
+.claim-row{font-size:12px;color:#78350f;margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid #fde68a;}
+
+/* ── ADMIN ── */
+.admin-wrap{max-width:1000px;margin:0 auto;padding:28px 20px;}
+.admin-table{width:100%;border-collapse:collapse;font-size:13px;}
+.admin-table th{padding:10px 12px;text-align:left;font-weight:700;color:#374151;background:#f1f5f9;white-space:nowrap;}
+.admin-table td{padding:10px 12px;border-bottom:1px solid #f1f5f9;}
+
+/* ── PROFILE ── */
+.profile-wrap{max-width:480px;margin:40px auto;padding:0 20px;}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#1e3a8a,#1d4ed8);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px;}
+.profile-name{font-weight:800;font-size:20px;margin-bottom:4px;text-align:center;}
+.profile-meta{color:#64748b;font-size:14px;text-align:center;margin-bottom:4px;}
+.profile-phone{font-weight:700;color:#1e3a8a;font-size:16px;text-align:center;}
+.profile-footer{margin-top:20px;background:#f8fafc;border-radius:10px;padding:14px;font-size:12px;color:#64748b;text-align:center;}
+
+/* ── MAIN CONTENT ── */
+.main-pad{max-width:1100px;margin:0 auto;padding:0 20px 40px;}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR (hidden initially) -->
+<div id="navbar" class="hidden">
+  <div class="nav-wrap">
+    <div class="nav-logo" onclick="navigate('home')">
+      <span style="font-size:22px">🔍</span>
+      <div>
+        <div class="nav-logo-name">Lost and Found</div>
+        <div class="nav-logo-sub">SRKIT - VIJAYAWADA</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="btn-orange" onclick="navigate('report')">+ Report Item</button>
+      <button class="btn-admin hidden" id="admin-btn" onclick="navigate('admin')">⚙ Admin</button>
+      <button class="btn-ghost" onclick="toggleMenu()" id="user-btn">User</button>
+    </div>
+  </div>
+  <div id="user-menu" class="hidden">
+    <button class="menu-item" onclick="navigate('home');closeMenu()">🏠 Home</button>
+    <button class="menu-item" onclick="navigate('myPosts');closeMenu()">📋 My Posts</button>
+    <button class="menu-item" onclick="navigate('profile');closeMenu()">👤 Profile</button>
+    <hr class="menu-divider"/>
+    <button class="menu-item danger" onclick="logout()">🚪 Logout</button>
+  </div>
+</div>
+
+<!-- APP SCREENS -->
+<div id="app"></div>
+
+<!-- MODAL -->
+<div id="modal-overlay" class="hidden" onclick="closeModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <span class="modal-title" id="modal-title"></span>
+      <button class="modal-close" onclick="hideModal()">×</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let state = {
+  screen: 'landing',
+  user: JSON.parse(sessionStorage.getItem('lf_user') || 'null'),
+  posts: JSON.parse(localStorage.getItem('lf_posts') || '[]'),
+  claims: JSON.parse(localStorage.getItem('lf_claims') || '[]'),
+  regStep: 1, regName:'', regPhone:'', regRoll:'', regType:'Student', regOtp:'',
+  loginStep: 1, loginPhone:'', loginOtp:'',
+  search:'', typeFilter:'all', catFilter:'All',
+  reportType:'lost', reportTitle:'', reportCat:'', reportLoc:'', reportDesc:'', reportPhone:'', reportPhoto:null,
+};
+
+const CATEGORIES = ["Electronics","Clothing","Bags","Keys","ID/Cards","Books","Stationery","Jewellery","Sports","Wallet","Documents","Other"];
+const LOCATIONS  = ["Main Block","Library","Canteen","Seminar Hall","Boys Hostel","Girls Hostel","Parking Area","Sports Ground","Admin Block","Labs - CSE","Labs - ECE","Labs - EEE","Labs - Mech","Auditorium","Bus Stop","Other"];
+const CAT_ICONS  = {Electronics:"💻",Clothing:"👕",Bags:"🎒",Keys:"🔑","ID/Cards":"🪪",Books:"📚",Stationery:"✏️",Jewellery:"💍",Sports:"⚽",Wallet:"👛",Documents:"📄",Other:"📦"};
+const THIRTY     = 30*24*60*60*1000;
+const OTP_STORE  = {};
+
+// ═══════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════
+function validPhone(p){ return /^[6-9]\d{9}$/.test(p.replace(/\s/g,'')); }
+function fmtPhone(p){ var d=p.replace(/\D/g,''); return d.length===10?'+91 '+d.slice(0,5)+' '+d.slice(5):p; }
+function expired(ts){ return Date.now()-ts>THIRTY; }
+function daysLeft(ts){ return Math.max(0,Math.ceil((ts+THIRTY-Date.now())/86400000)); }
+function timeAgo(ts){ var d=Math.floor((Date.now()-ts)/86400000); return d===0?'Today':d===1?'Yesterday':d+' days ago'; }
+function sendOTP(phone){ OTP_STORE[phone]='123456'; }
+function checkOTP(phone,otp){ return OTP_STORE[phone]===otp; }
+function savePosts(){ localStorage.setItem('lf_posts', JSON.stringify(state.posts)); }
+function saveClaims(){ localStorage.setItem('lf_claims', JSON.stringify(state.claims)); }
+function saveUser(){ sessionStorage.setItem('lf_user', JSON.stringify(state.user)); }
+function escape(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function activePosts(){ return state.posts.filter(function(p){ return !expired(p.createdAt); }); }
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function navigate(screen){
+  if(!state.user && !['landing','register','login'].includes(screen)) return;
+  state.screen = screen;
+  render();
+  closeMenu();
+}
+function logout(){
+  state.user = null;
+  sessionStorage.removeItem('lf_user');
+  state.screen = 'landing';
+  render();
+  closeMenu();
+}
+function toggleMenu(){
+  document.getElementById('user-menu').classList.toggle('hidden');
+}
+function closeMenu(){
+  var m = document.getElementById('user-menu');
+  if(m) m.classList.add('hidden');
+}
+document.addEventListener('click', function(e){
+  var menu = document.getElementById('user-menu');
+  var btn = document.getElementById('user-btn');
+  if(menu && btn && !menu.contains(e.target) && !btn.contains(e.target)){
+    menu.classList.add('hidden');
+  }
+});
+
+// ═══════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════
+function showModal(title, html){
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+function hideModal(){
+  document.getElementById('modal-overlay').classList.add('hidden');
+}
+function closeModal(e){
+  if(e.target === document.getElementById('modal-overlay')) hideModal();
+}
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+function render(){
+  var app = document.getElementById('app');
+  var nav = document.getElementById('navbar');
+  var adminBtn = document.getElementById('admin-btn');
+  var userBtn  = document.getElementById('user-btn');
+
+  // Navbar
+  if(state.user){
+    nav.classList.remove('hidden');
+    userBtn.textContent = state.user.name.split(' ')[0];
+    if(state.user.phone === '9999999999') adminBtn.classList.remove('hidden');
+    else adminBtn.classList.add('hidden');
+  } else {
+    nav.classList.add('hidden');
+  }
+
+  // Screens
+  if(state.screen === 'landing')  { app.innerHTML = renderLanding();  return; }
+  if(state.screen === 'register') { app.innerHTML = renderRegister(); return; }
+  if(state.screen === 'login')    { app.innerHTML = renderLogin();    return; }
+  if(state.screen === 'home')     { app.innerHTML = renderHome();     return; }
+  if(state.screen === 'report')   { app.innerHTML = renderReport();   return; }
+  if(state.screen === 'myPosts')  { app.innerHTML = renderMyPosts();  return; }
+  if(state.screen === 'admin')    { app.innerHTML = renderAdmin();    return; }
+  if(state.screen === 'profile')  { app.innerHTML = renderProfile();  return; }
+}
+
+// ═══════════════════════════════════════
+// LANDING
+// ═══════════════════════════════════════
+function renderLanding(){
+  return '<div id="screen-landing" class="landing">'
+    +'<div class="landing-icon">🔍</div>'
+    +'<h1>Lost and Found</h1>'
+    +'<p class="landing-sub">SRK Institute of Technology - Vijayawada</p>'
+    +'<p class="landing-desc">A secure digital platform to report and reclaim lost items on campus.</p>'
+    +'<div class="landing-btns">'
+    +'<button class="btn-full btn-gradient" style="width:auto;padding:13px 32px;font-size:15px;" onclick="navigate(\'register\')">Register</button>'
+    +'<button class="btn-full" style="width:auto;padding:13px 32px;font-size:15px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,.5);" onclick="navigate(\'login\')">Login</button>'
+    +'</div>'
+    +'<button onclick="window.location.href=\'index.html\'" style="margin-top:20px;background:none;border:1px solid rgba(255,255,255,.3);color:#cbd5e1;padding:8px 18px;border-radius:8px;cursor:pointer;font-size:12px;font-family:Poppins,sans-serif;">Back to Prototype</button>'
+    +'</div>';
+}
+
+// ═══════════════════════════════════════
+// REGISTER
+// ═══════════════════════════════════════
+function renderRegister(){
+  var step = state.regStep;
+  var html = '<div class="auth-wrap"><div class="auth-box">'
+    +'<button onclick="navigate(\'landing\')" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:13px;margin-bottom:20px;padding:0;font-family:Poppins,sans-serif;">← Back</button>'
+    +'<div class="auth-icon">📝</div>'
+    +'<div class="auth-title">Create Account</div>'
+    +'<div class="auth-sub">Step '+step+' of 2</div>';
+
+  if(state.regErr)  html += '<div class="alert alert-error">'+escape(state.regErr)+'</div>';
+  if(state.regInfo) html += '<div class="alert alert-info">'+escape(state.regInfo)+'</div>';
+
+  if(step===1){
+    html += '<div class="form-group"><label class="lbl">FULL NAME</label><input class="inp" id="reg-name" placeholder="Your full name" value="'+escape(state.regName)+'" oninput="state.regName=this.value"/></div>'
+      +'<div class="form-group"><label class="lbl">USER TYPE</label><div class="type-row">'
+      +['Student','Staff','Faculty'].map(function(t){
+        return '<button class="type-btn '+(state.regType===t?'active':'inactive')+'" onclick="state.regType=\''+t+'\';render()">'+t+'</button>';
+      }).join('')
+      +'</div></div>'
+      +(state.regType==='Student'?'<div class="form-group"><label class="lbl">ROLL NUMBER</label><input class="inp" id="reg-roll" placeholder="e.g. 24X41A4255" value="'+escape(state.regRoll)+'" oninput="state.regRoll=this.value.toUpperCase()"/></div>':'')
+      +'<div class="form-group"><label class="lbl">INDIAN MOBILE NUMBER</label><div class="phone-row"><div class="phone-prefix">🇮🇳 +91</div><input class="inp" id="reg-phone" type="tel" maxlength="10" placeholder="9876543210" value="'+escape(state.regPhone)+'" oninput="state.regPhone=this.value.replace(/\\D/g,\'\')"/></div></div>'
+      +'<button class="btn-full btn-navy" onclick="doRegSendOTP()">Send OTP →</button>';
+  } else {
+    html += '<div style="text-align:center;margin-bottom:20px;">'
+      +'<p style="color:#475569;font-size:14px;">OTP sent to +91 '+escape(state.regPhone.slice(0,5))+' '+escape(state.regPhone.slice(5))+'</p></div>'
+      +'<div class="form-group"><label class="lbl">OTP CODE</label><input class="inp" id="reg-otp" type="tel" maxlength="6" placeholder="6-digit OTP" value="'+escape(state.regOtp)+'" oninput="state.regOtp=this.value.replace(/\\D/g,\'\')"/></div>'
+      +'<button class="btn-full btn-navy" style="margin-bottom:10px;" onclick="doRegVerify()">Verify and Register ✓</button>'
+      +'<button class="btn-full btn-gray" onclick="state.regStep=1;state.regErr=\'\';state.regInfo=\'\';render()">Change Number</button>';
+  }
+  html += '</div></div>';
+  return html;
+}
+function doRegSendOTP(){
+  state.regName = document.getElementById('reg-name') ? document.getElementById('reg-name').value : state.regName;
+  state.regPhone = document.getElementById('reg-phone') ? document.getElementById('reg-phone').value.replace(/\D/g,'') : state.regPhone;
+  if(!state.regName.trim()){ state.regErr='Please enter your full name.'; render(); return; }
+  if(!validPhone(state.regPhone)){ state.regErr='Enter a valid 10-digit Indian mobile number.'; render(); return; }
+  state.regErr=''; sendOTP(state.regPhone);
+  state.regInfo='OTP sent — use 123456 for demo'; state.regStep=2; render();
+}
+function doRegVerify(){
+  state.regOtp = document.getElementById('reg-otp') ? document.getElementById('reg-otp').value : state.regOtp;
+  if(!checkOTP(state.regPhone, state.regOtp)){ state.regErr='Invalid OTP. Use 123456.'; render(); return; }
+  state.user = { name:state.regName, phone:state.regPhone, rollNo:state.regRoll, userType:state.regType };
+  saveUser(); state.regErr=''; state.regStep=1; state.screen='home'; render();
+}
+
+// ═══════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════
+function renderLogin(){
+  var step = state.loginStep;
+  var html = '<div class="auth-wrap"><div class="auth-box">'
+    +'<button onclick="navigate(\'landing\')" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:13px;margin-bottom:20px;padding:0;font-family:Poppins,sans-serif;">← Back</button>'
+    +'<div class="auth-icon">🔐</div>'
+    +'<div class="auth-title">Login</div>'
+    +'<div class="auth-sub">Campus Lost and Found</div>';
+
+  if(state.loginErr)  html += '<div class="alert alert-error">'+escape(state.loginErr)+'</div>';
+  if(state.loginInfo) html += '<div class="alert alert-info">'+escape(state.loginInfo)+'</div>';
+
+  if(step===1){
+    html += '<div class="form-group"><label class="lbl">INDIAN MOBILE NUMBER</label><div class="phone-row"><div class="phone-prefix">🇮🇳 +91</div><input class="inp" id="login-phone" type="tel" maxlength="10" placeholder="9876543210" value="'+escape(state.loginPhone)+'" oninput="state.loginPhone=this.value.replace(/\\D/g,\'\')"/></div></div>'
+      +'<button class="btn-full btn-navy" onclick="doLoginSend()">Send OTP →</button>';
+  } else {
+    html += '<div class="form-group"><label class="lbl">OTP CODE</label><input class="inp" id="login-otp" type="tel" maxlength="6" placeholder="6-digit OTP" value="'+escape(state.loginOtp)+'" oninput="state.loginOtp=this.value.replace(/\\D/g,\'\')"/></div>'
+      +'<button class="btn-full btn-navy" onclick="doLoginVerify()">Verify and Login ✓</button>';
+  }
+  html += '</div></div>';
+  return html;
+}
+function doLoginSend(){
+  state.loginPhone = document.getElementById('login-phone') ? document.getElementById('login-phone').value.replace(/\D/g,'') : state.loginPhone;
+  if(!validPhone(state.loginPhone)){ state.loginErr='Enter a valid 10-digit Indian mobile number.'; render(); return; }
+  state.loginErr=''; sendOTP(state.loginPhone);
+  state.loginInfo='OTP sent — use 123456 for demo'; state.loginStep=2; render();
+}
+function doLoginVerify(){
+  state.loginOtp = document.getElementById('login-otp') ? document.getElementById('login-otp').value : state.loginOtp;
+  if(!checkOTP(state.loginPhone, state.loginOtp)){ state.loginErr='Invalid OTP. Use 123456.'; render(); return; }
+  state.user = { name:'Campus User', phone:state.loginPhone, rollNo:'', userType:'Student' };
+  saveUser(); state.loginErr=''; state.loginStep=1; state.screen='home'; render();
+}
+
+// ═══════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════
+function renderHome(){
+  var active = activePosts();
+  var lostN  = active.filter(function(p){ return p.type==='lost'; }).length;
+  var foundN = active.filter(function(p){ return p.type==='found'; }).length;
+
+  var filtered = active.filter(function(p){
+    if(state.typeFilter!=='all' && p.type!==state.typeFilter) return false;
+    if(state.catFilter!=='All' && p.category!==state.catFilter) return false;
+    var s = state.search.toLowerCase();
+    if(s && p.title.toLowerCase().indexOf(s)<0 && p.description.toLowerCase().indexOf(s)<0) return false;
+    return true;
+  });
+
+  var html = '<div class="home-banner"><div class="banner-inner">'
+    +'<div class="banner-title">Campus Lost and Found Board</div>'
+    +'<div class="banner-sub">SRK Institute of Technology - Vijayawada</div>'
+    +'<div class="banner-stats">'
+    +'<div class="stat-box"><div class="stat-num">'+lostN+'</div><div class="stat-lbl">Lost Items</div></div>'
+    +'<div class="stat-box"><div class="stat-num">'+foundN+'</div><div class="stat-lbl">Found Items</div></div>'
+    +'<div class="stat-box"><div class="stat-num">'+active.length+'</div><div class="stat-lbl">Total Active</div></div>'
+    +'</div></div></div>';
+
+  html += '<div class="main-pad">';
+
+  // Filter bar
+  html += '<div class="filter-bar">'
+    +'<input class="filter-search" placeholder="Search items..." value="'+escape(state.search)+'" oninput="state.search=this.value;renderGrid()" />'
+    +'<div class="filter-chips">'
+    +'<span class="chip '+(state.typeFilter==='all'?'active-all':'')+'" onclick="state.typeFilter=\'all\';renderGrid()">All</span>'
+    +'<span class="chip '+(state.typeFilter==='lost'?'active-lost':'')+'" onclick="state.typeFilter=\'lost\';renderGrid()">Lost</span>'
+    +'<span class="chip '+(state.typeFilter==='found'?'active-found':'')+'" onclick="state.typeFilter=\'found\';renderGrid()">Found</span>'
+    +'<span style="width:1px;background:#e2e8f0;margin:0 4px;display:inline-block;"></span>'
+    +['All',...CATEGORIES].map(function(c){
+      return '<span class="chip '+(state.catFilter===c?'active-cat':'')+'" onclick="state.catFilter=\''+c+'\';renderGrid()">'+(c!=='All'?CAT_ICONS[c]+' ':'')+c+'</span>';
+    }).join('')
+    +'</div></div>';
+
+  // Grid
+  html += '<div id="post-grid">' + renderGrid(filtered) + '</div>';
+  html += '</div>';
+  return html;
+}
+
+function renderGrid(filtered){
+  if(filtered === undefined){
+    var active = activePosts();
+    filtered = active.filter(function(p){
+      if(state.typeFilter!=='all' && p.type!==state.typeFilter) return false;
+      if(state.catFilter!=='All' && p.category!==state.catFilter) return false;
+      var s = state.search.toLowerCase();
+      if(s && p.title.toLowerCase().indexOf(s)<0 && p.description.toLowerCase().indexOf(s)<0) return false;
+      return true;
+    });
+    var grid = document.getElementById('post-grid');
+    if(grid) { grid.innerHTML = renderGrid(filtered); return; }
+  }
+
+  if(filtered.length===0){
+    return '<div class="empty-state"><div class="empty-icon">'+(activePosts().length===0?'📭':'🔎')+'</div>'
+      +'<div class="empty-title">'+(activePosts().length===0?'No posts yet':'No matching items')+'</div>'
+      +'<div class="empty-desc">'+(activePosts().length===0?'Be the first to report a lost or found item.':'Try adjusting your filters.')+'</div></div>';
+  }
+
+  return '<div class="post-grid">'+filtered.map(function(p){ return renderPostCard(p); }).join('')+'</div>';
+}
+
+function renderPostCard(p){
+  var mine = p.postedBy === state.user.phone;
+  var dl   = daysLeft(p.createdAt);
+  var icon = CAT_ICONS[p.category] || '📦';
+  var desc = p.description.length>80 ? p.description.slice(0,80)+'...' : p.description;
+
+  var html = '<div class="post-card" onclick="viewPost(\''+p.id+'\')">'
+    +'<div class="post-top-bar" style="background:'+(p.type==='lost'?'#dc2626':'#16a34a')+'"></div>'
+    +(p.photo?'<img class="post-thumb" src="'+p.photo+'" alt="" onclick="viewPost(\''+p.id+'\')" />':'')
+    +'<div class="post-head">'
+    +'<span class="post-icon">'+icon+'</span>'
+    +'<div class="post-badges">'
+    +'<span class="badge-'+p.type+'">'+p.type.toUpperCase()+'</span>'
+    +(p.status==='claimed'?'<span class="badge-claimed">CLAIMED</span>':'')
+    +'</div></div>'
+    +'<div class="post-title">'+escape(p.title)+'</div>'
+    +'<div class="post-loc">📍 '+escape(p.location)+' · '+timeAgo(p.createdAt)+'</div>'
+    +'<div class="post-desc">'+escape(desc)+'</div>'
+    +'<div class="post-contact '+p.type+'">'
+    +'<div class="contact-label">📞 CONTACT</div>'
+    +'<div class="contact-phone">'+fmtPhone(p.contactPhone)+'</div>'
+    +'<div class="contact-name">'+escape(p.postedByName)+(p.rollNo?' · '+escape(p.rollNo):'')+'</div>'
+    +'</div>'
+    +'<div class="post-footer">'
+    +'<span class="post-expiry'+(dl<=5?' soon':'')+'">Expires in '+dl+'d</span>'
+    +'<div class="post-actions" onclick="event.stopPropagation()">';
+
+  if(!mine && p.status!=='claimed' && p.type==='lost')  html += '<button class="btn-success" onclick="openClaim(\''+p.id+'\')">I Found It</button>';
+  if(!mine && p.status!=='claimed' && p.type==='found') html += '<button class="btn-primary" onclick="openClaim(\''+p.id+'\')">Its Mine</button>';
+  if(mine) html += '<button class="btn-danger" onclick="deletePost(\''+p.id+'\')">Delete</button>';
+
+  html += '</div></div></div>';
+  return html;
+}
+
+function viewPost(id){
+  var p = state.posts.find(function(x){ return x.id==id; });
+  if(!p) return;
+  var mine = p.postedBy === state.user.phone;
+  var icon = CAT_ICONS[p.category] || '📦';
+
+  var html = (p.photo?'<img src="'+p.photo+'" style="width:100%;border-radius:10px;margin-bottom:14px;max-height:200px;object-fit:cover" alt=""/>':'')
+    +'<div style="display:flex;gap:8px;margin-bottom:12px;">'
+    +'<span class="badge-'+p.type+'">'+p.type.toUpperCase()+'</span>'
+    +(p.status==='claimed'?'<span class="badge-claimed">CLAIMED</span>':'')
+    +'</div>'
+    +'<h2 style="font-weight:800;font-size:20px;color:#0f172a;margin-bottom:6px;">'+icon+' '+escape(p.title)+'</h2>'
+    +'<p style="font-size:13px;color:#64748b;margin-bottom:12px;">📍 '+escape(p.location)+' · '+timeAgo(p.createdAt)+' · Expires in '+daysLeft(p.createdAt)+' days</p>'
+    +'<p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:16px;">'+escape(p.description)+'</p>'
+    +'<div class="post-contact '+p.type+'" style="margin-bottom:16px;">'
+    +'<div class="contact-label" style="font-weight:700;">📞 CONTACT DETAILS (PUBLIC)</div>'
+    +'<div class="contact-phone" style="font-size:16px;">'+fmtPhone(p.contactPhone)+'</div>'
+    +'<div class="contact-name">'+escape(p.postedByName)+(p.rollNo?' · '+escape(p.rollNo):'')+'</div>'
+    +'</div>';
+
+  if(!mine && p.status!=='claimed'){
+    html += '<button class="btn-full '+(p.type==='lost'?'btn-success':'btn-navy')+'" onclick="hideModal();openClaim(\''+p.id+'\')">'
+      +(p.type==='lost'?'I Found This Item':'This Item is Mine')+'</button>';
+  }
+  showModal('', html);
+}
+
+function deletePost(id){
+  if(!confirm('Delete this post?')) return;
+  state.posts = state.posts.filter(function(p){ return p.id!=id; });
+  savePosts(); hideModal(); render();
+}
+
+// ═══════════════════════════════════════
+// CLAIM
+// ═══════════════════════════════════════
+function openClaim(id){
+  var p = state.posts.find(function(x){ return x.id==id; });
+  if(!p) return;
+  var html = '<p style="font-size:13px;color:#475569;margin-bottom:16px;">Provide proof of ownership or finding details.</p>'
+    +'<div class="form-group"><label class="lbl">PROOF</label>'
+    +'<textarea class="inp" id="claim-proof" placeholder="Details only the true owner would know..." style="min-height:80px;resize:vertical;"></textarea></div>'
+    +'<div class="form-group"><label class="lbl">YOUR CONTACT NUMBER</label>'
+    +'<div class="phone-row"><div class="phone-prefix">🇮🇳 +91</div>'
+    +'<input class="inp" id="claim-phone" type="tel" maxlength="10" value="'+escape(state.user.phone)+'"/></div></div>'
+    +'<div id="claim-err"></div>'
+    +'<div style="display:flex;gap:10px;">'
+    +'<button class="btn-gray" style="flex:1;" onclick="hideModal()">Cancel</button>'
+    +'<button class="btn-primary" style="flex:2;border:none;padding:11px;" onclick="submitClaim(\''+id+'\')">Submit Claim</button>'
+    +'</div>';
+  showModal(p.type==='lost'?'I Found This Item':'This Item is Mine', html);
+}
+
+function submitClaim(id){
+  var proof = document.getElementById('claim-proof').value.trim();
+  var phone = document.getElementById('claim-phone').value.replace(/\D/g,'');
+  var errEl = document.getElementById('claim-err');
+  if(!proof){ errEl.innerHTML='<div class="alert alert-error">Please describe your proof.</div>'; return; }
+  if(!validPhone(phone)){ errEl.innerHTML='<div class="alert alert-error">Enter a valid Indian number.</div>'; return; }
+
+  var claim = { postId:id, claimerName:state.user.name, claimerPhone:phone, claimerRoll:state.user.rollNo, proof:proof, claimedAt:Date.now() };
+  state.claims.push(claim); saveClaims();
+  state.posts = state.posts.map(function(p){ return p.id==id ? Object.assign({},p,{status:'claimed'}) : p; });
+  savePosts(); hideModal(); render();
+}
+
+// ═══════════════════════════════════════
+// REPORT FORM
+// ═══════════════════════════════════════
+function renderReport(){
+  if(!state.reportPhone) state.reportPhone = state.user.phone;
+  var html = '<div class="report-wrap">'
+    +'<div class="card" style="border-radius:20px;padding:32px;box-shadow:0 4px 20px rgba(0,0,0,.07);">'
+    +'<h2 style="font-weight:800;font-size:22px;color:#0f172a;margin-bottom:4px;">Submit a Report</h2>'
+    +'<p style="font-size:13px;color:#64748b;margin-bottom:24px;">Help reunite items with their owners.</p>'
+    +'<div id="report-err"></div>'
+    +'<div class="type-toggle">'
+    +'<button class="type-opt lost '+(state.reportType==='lost'?'active':'inactive')+'" onclick="state.reportType=\'lost\';renderReportTypes()">😟 I Lost Something</button>'
+    +'<button class="type-opt found '+(state.reportType==='found'?'active':'inactive')+'" onclick="state.reportType=\'found\';renderReportTypes()">🎉 I Found Something</button>'
+    +'</div>'
+    +'<div class="form-group"><label class="lbl">ITEM NAME</label>'
+    +'<input class="inp" id="r-title" placeholder="e.g. Black HP Laptop" value="'+escape(state.reportTitle)+'" oninput="state.reportTitle=this.value"/></div>'
+    +'<div class="two-col">'
+    +'<div class="form-group"><label class="lbl">CATEGORY</label>'
+    +'<select class="inp" id="r-cat" onchange="state.reportCat=this.value" style="background:#fff;">'
+    +'<option value="">Select</option>'
+    +CATEGORIES.map(function(c){ return '<option value="'+c+'"'+(state.reportCat===c?' selected':'')+'>'+c+'</option>'; }).join('')
+    +'</select></div>'
+    +'<div class="form-group"><label class="lbl">LOCATION</label>'
+    +'<select class="inp" id="r-loc" onchange="state.reportLoc=this.value" style="background:#fff;">'
+    +'<option value="">Select</option>'
+    +LOCATIONS.map(function(l){ return '<option value="'+l+'"'+(state.reportLoc===l?' selected':'')+'>'+l+'</option>'; }).join('')
+    +'</select></div>'
+    +'</div>'
+    +'<div class="form-group"><label class="lbl">DESCRIPTION</label>'
+    +'<textarea class="inp" id="r-desc" placeholder="Color, brand, features..." oninput="state.reportDesc=this.value">'+escape(state.reportDesc)+'</textarea></div>'
+    +'<div class="form-group"><label class="lbl">CONTACT NUMBER (PUBLIC)</label>'
+    +'<div class="phone-row"><div class="phone-prefix">🇮🇳 +91</div>'
+    +'<input class="inp" id="r-phone" type="tel" maxlength="10" value="'+escape(state.reportPhone)+'" oninput="state.reportPhone=this.value.replace(/\\D/g,\'\')"/></div>'
+    +'<p style="font-size:11px;color:#94a3b8;margin-top:4px;">This number will be publicly visible.</p></div>'
+    +'<div class="form-group"><label class="lbl">PHOTO (OPTIONAL)</label>'
+    +'<div class="photo-drop" onclick="document.getElementById(\'r-photo\').click()" id="photo-drop">'
+    +(state.reportPhoto
+      ?'<img class="photo-preview" src="'+state.reportPhoto+'" alt=""/>'
+      :'<div class="photo-drop-icon">📷</div><div class="photo-drop-text">Click to upload image</div>')
+    +'</div>'
+    +'<input type="file" id="r-photo" accept="image/*" style="display:none" onchange="handlePhoto(this)"/></div>'
+    +'<div class="form-btns">'
+    +'<button class="btn-gray" style="flex:1;" onclick="state.reportPhoto=null;navigate(\'home\')">Cancel</button>'
+    +'<button class="btn-primary" style="flex:2;border:none;padding:11px;" onclick="submitReport()">Submit Report</button>'
+    +'</div>'
+    +'</div></div>';
+  return html;
+}
+
+function renderReportTypes(){
+  document.querySelectorAll('.type-opt').forEach(function(b){
+    b.className = 'type-opt '+(b.classList.contains('lost')?'lost':'found')+' '+(b.classList.contains('lost')?(state.reportType==='lost'?'active':'inactive'):(state.reportType==='found'?'active':'inactive'));
+  });
+}
+
+function handlePhoto(input){
+  if(!input.files || !input.files[0]) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    state.reportPhoto = e.target.result;
+    var drop = document.getElementById('photo-drop');
+    if(drop) drop.innerHTML = '<img class="photo-preview" src="'+e.target.result+'" alt=""/>';
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function submitReport(){
+  var title = document.getElementById('r-title').value.trim();
+  var cat   = document.getElementById('r-cat').value;
+  var loc   = document.getElementById('r-loc').value;
+  var desc  = document.getElementById('r-desc').value.trim();
+  var phone = document.getElementById('r-phone').value.replace(/\D/g,'');
+  var errEl = document.getElementById('report-err');
+
+  if(!title){ errEl.innerHTML='<div class="alert alert-error">Item name is required.</div>'; return; }
+  if(!cat)  { errEl.innerHTML='<div class="alert alert-error">Please select a category.</div>'; return; }
+  if(!loc)  { errEl.innerHTML='<div class="alert alert-error">Please select a location.</div>'; return; }
+  if(!desc) { errEl.innerHTML='<div class="alert alert-error">Description is required.</div>'; return; }
+  if(!validPhone(phone)){ errEl.innerHTML='<div class="alert alert-error">Enter a valid Indian contact number.</div>'; return; }
+
+  var post = {
+    id: Date.now(), type: state.reportType, title:title, category:cat, location:loc,
+    description:desc, contactPhone:phone, photo:state.reportPhoto,
+    postedBy:state.user.phone, postedByName:state.user.name, rollNo:state.user.rollNo,
+    createdAt:Date.now(), status:'active'
+  };
+  state.posts.unshift(post); savePosts();
+  state.reportTitle=''; state.reportCat=''; state.reportLoc=''; state.reportDesc=''; state.reportPhone=state.user.phone; state.reportPhoto=null;
+  state.screen='home'; render();
+}
+
+// ═══════════════════════════════════════
+// MY POSTS
+// ═══════════════════════════════════════
+function renderMyPosts(){
+  var mine     = state.posts.filter(function(p){ return p.postedBy===state.user.phone; });
+  var myClaims = state.claims.filter(function(c){ return c.claimerPhone===state.user.phone; });
+
+  var html = '<div class="section-wrap"><div class="section-title">My Posts</div>';
+  if(mine.length===0) html += '<div class="alert alert-info">You have not posted anything yet.</div>';
+
+  html += '<div class="post-grid" style="margin-bottom:32px;">'+mine.map(function(p){
+    var dl = daysLeft(p.createdAt);
+    var myClaims2 = state.claims.filter(function(c){ return c.postId==p.id; });
+    var claimsHtml = myClaims2.length>0
+      ? '<div class="claims-box"><div class="claims-title">'+myClaims2.length+' Claim(s)</div>'
+        +myClaims2.map(function(cl){ return '<div class="claim-row"><strong>'+escape(cl.claimerName)+'</strong> · '+fmtPhone(cl.claimerPhone)+'<br><span>'+escape(cl.proof.slice(0,60))+'</span></div>'; }).join('')
+        +'</div>' : '';
+    return '<div class="card">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">'
+      +'<span class="badge-'+p.type+'">'+p.type.toUpperCase()+'</span>'
+      +'<button class="btn-danger" onclick="deletePost(\''+p.id+'\')">Delete</button>'
+      +'</div>'
+      +'<div style="font-weight:700;font-size:15px;margin-bottom:4px;">'+escape(p.title)+'</div>'
+      +'<div style="font-size:12px;color:#64748b;margin-bottom:8px;">📍 '+escape(p.location)+'</div>'
+      +'<div style="font-size:12px;color:'+(dl<=5?'#dc2626':'#64748b')+';">'+(expired(p.createdAt)?'EXPIRED':'Expires in '+dl+' days')+'</div>'
+      +claimsHtml
+      +'</div>';
+  }).join('')+'</div>';
+
+  if(myClaims.length>0){
+    html += '<div class="section-title">My Claims</div><div style="display:grid;gap:12px;">';
+    myClaims.forEach(function(cl){
+      var post = state.posts.find(function(p){ return p.id==cl.postId; });
+      if(post){
+        html += '<div class="card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">'
+          +'<div><span class="badge-'+post.type+'">'+post.type.toUpperCase()+'</span>'
+          +'<div style="font-weight:700;margin-top:6px;">'+escape(post.title)+'</div>'
+          +'<div style="font-size:12px;color:#64748b;">Claimed '+timeAgo(cl.claimedAt)+'</div></div>'
+          +'<div style="font-size:13px;color:#475569;">Contact: <strong>'+fmtPhone(post.contactPhone)+'</strong></div>'
+          +'</div>';
+      }
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+// ═══════════════════════════════════════
+// ADMIN
+// ═══════════════════════════════════════
+function renderAdmin(){
+  var html = '<div class="admin-wrap"><div class="section-title">⚙️ Admin Panel</div>'
+    +'<div style="overflow-x:auto;">'
+    +'<table class="admin-table">'
+    +'<thead><tr><th>Type</th><th>Title</th><th>Category</th><th>Location</th><th>Posted By</th><th>Contact</th><th>Posted</th><th>Expires</th><th>Action</th></tr></thead>'
+    +'<tbody>';
+
+  state.posts.forEach(function(p){
+    var dl = daysLeft(p.createdAt);
+    html += '<tr>'
+      +'<td><span class="badge-'+p.type+'">'+p.type+'</span></td>'
+      +'<td style="font-weight:600;">'+escape(p.title)+'</td>'
+      +'<td style="color:#64748b;">'+escape(p.category)+'</td>'
+      +'<td style="color:#64748b;">'+escape(p.location)+'</td>'
+      +'<td>'+escape(p.postedByName)+'</td>'
+      +'<td>'+fmtPhone(p.contactPhone)+'</td>'
+      +'<td style="color:#64748b;white-space:nowrap;">'+timeAgo(p.createdAt)+'</td>'
+      +'<td style="color:'+(dl<=5?'#dc2626':'#64748b')+';">'+(expired(p.createdAt)?'EXPIRED':dl+'d')+'</td>'
+      +'<td><button class="btn-danger" onclick="deletePost(\''+p.id+'\')">Remove</button></td>'
+      +'</tr>';
+  });
+
+  if(state.posts.length===0) html += '<tr><td colspan="9" style="text-align:center;padding:32px;color:#94a3b8;">No posts to manage.</td></tr>';
+  html += '</tbody></table></div></div>';
+  return html;
+}
+
+// ═══════════════════════════════════════
+// PROFILE
+// ═══════════════════════════════════════
+function renderProfile(){
+  return '<div class="profile-wrap"><div class="card" style="text-align:center;padding:36px;">'
+    +'<div class="profile-avatar">👤</div>'
+    +'<div class="profile-name">'+escape(state.user.name)+'</div>'
+    +'<div class="profile-meta">'+escape(state.user.userType)+(state.user.rollNo?' · '+escape(state.user.rollNo):'')+'</div>'
+    +'<div class="profile-phone">'+fmtPhone(state.user.phone)+'</div>'
+    +'<div class="profile-footer">SRK Institute of Technology, Vijayawada</div>'
+    +'</div></div>';
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+// Clean expired posts on load
+state.posts = state.posts.filter(function(p){ return !expired(p.createdAt); });
+savePosts();
+
+// If user already logged in, go to home
+if(state.user) state.screen = 'home';
+
+render();
+</script>
+</body>
+</html>

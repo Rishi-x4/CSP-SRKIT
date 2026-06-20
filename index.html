@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lost & Found — SRKIT</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;background:#f8fafc;overflow-x:hidden;}
+nav{background:#1e3a8a;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:60px;}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.logo-name{color:#fff;font-weight:800;font-size:16px;line-height:1.1;}
+.logo-sub{color:#93c5fd;font-size:10px;letter-spacing:.08em;}
+.nav-links{display:flex;gap:4px;}
+.nav-links a{color:rgba(255,255,255,.75);font-size:13px;font-weight:600;padding:7px 12px;border-radius:8px;text-decoration:none;transition:all .2s;}
+.nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.15);color:#fff;}
+.nav-cta{background:linear-gradient(135deg,#7c3aed,#f97316);color:#fff!important;border-radius:8px!important;padding:8px 18px!important;font-weight:800!important;box-shadow:0 4px 14px rgba(124,58,237,.4);}
+.hero{min-height:88vh;background:linear-gradient(140deg,#0f172a 0%,#1e3a8a 50%,#3730a3 100%);display:grid;grid-template-columns:1.1fr 0.9fr;align-items:center;padding:60px 80px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 75%,rgba(124,58,237,.15),transparent 65%);}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.5);color:#c4b5fd;font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;margin-bottom:20px;letter-spacing:.1em;}
+.hero h1{font-size:clamp(36px,5vw,60px);font-weight:900;color:#fff;line-height:1.1;margin-bottom:10px;}
+.hero h1 span{color:#fbbf24;}
+.hero-sub{font-size:clamp(16px,2vw,22px);color:#c4b5fd;font-weight:700;margin-bottom:14px;}
+.hero-desc{font-size:15px;color:#94a3b8;line-height:1.8;max-width:480px;margin-bottom:32px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#f97316,#fbbf24);color:#0f172a;font-size:14px;font-weight:800;padding:14px 28px;border-radius:10px;text-decoration:none;box-shadow:0 8px 24px rgba(249,115,22,.4);transition:all .25s;}
+.btn-p:hover{transform:translateY(-2px);}
+.btn-o{display:inline-flex;align-items:center;gap:8px;border:1.5px solid rgba(255,255,255,.4);color:#fff;font-size:14px;font-weight:600;padding:13px 28px;border-radius:10px;text-decoration:none;transition:all .25s;}
+.btn-o:hover{background:rgba(255,255,255,.1);}
+.hero-visual{display:flex;align-items:center;justify-content:center;position:relative;z-index:2;}
+.phone-mock{background:#1e293b;border-radius:24px;border:2.5px solid #7c3aed;width:240px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:float 5s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+.ph-hdr{background:linear-gradient(135deg,#1e3a8a,#7c3aed);padding:10px;text-align:center;}
+.ph-hdr .pt{color:#fff;font-size:9px;font-weight:800;letter-spacing:.1em;}
+.ph-hdr .ps{color:#93c5fd;font-size:7px;margin-top:2px;}
+.ph-search{background:#0f172a;margin:6px;border-radius:6px;padding:6px 10px;font-size:8px;color:#475569;border:1px solid #334155;}
+.pc{background:#0f172a;margin:4px 6px;border-radius:8px;padding:7px 8px;border-left:3px solid;}
+.pc.lost{border-color:#ef4444;}.pc.found{border-color:#22c55e;}
+.pc-top{display:flex;justify-content:space-between;margin-bottom:3px;}
+.pbadge{font-size:7px;font-weight:800;padding:1.5px 5px;border-radius:3px;}
+.lost .pbadge{background:#fee2e2;color:#dc2626;}.found .pbadge{background:#dcfce7;color:#16a34a;}
+.ptime{font-size:7px;color:#475569;}
+.ptitle{color:#fff;font-size:8px;font-weight:700;}
+.ploc{color:#64748b;font-size:7px;margin-top:2px;}
+.pph{background:#1c1917;border-radius:4px;color:#fbbf24;font-size:7px;font-weight:700;padding:2px 5px;margin-top:3px;display:inline-block;}
+.ftag{position:absolute;background:#fff;border-radius:10px;padding:6px 12px;font-size:10px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:6px;box-shadow:0 4px 14px rgba(0,0,0,.2);border:1px solid #e2e8f0;white-space:nowrap;}
+.tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sec{padding:80px 5%;}
+.sec-inner{max-width:1100px;margin:0 auto;}
+.sec-tag{font-size:11px;font-weight:800;color:#7c3aed;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:6px;}
+.sec-tag::before{content:'· ';}.sec-tag::after{content:' ·';}
+.sec-title{font-size:clamp(26px,3.5vw,36px);font-weight:900;color:#0f172a;margin-bottom:12px;padding-bottom:12px;position:relative;}
+.sec-title::after{content:'';position:absolute;bottom:0;left:0;width:50px;height:3px;border-radius:2px;background:linear-gradient(90deg,#7c3aed,#f97316);}
+.sec-desc{font-size:15px;color:#64748b;max-width:580px;line-height:1.8;margin-bottom:48px;}
+.prob-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.prob-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 3px 12px rgba(30,58,138,.1);transition:all .25s;}
+.prob-card:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(30,58,138,.18);}
+.prob-img{height:120px;display:flex;align-items:center;justify-content:center;font-size:36px;}
+.prob-body{padding:14px 16px;}
+.prob-icon-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.prob-ico{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#f97316);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.prob-card h3{font-size:11px;font-weight:800;color:#1e3a8a;letter-spacing:.06em;text-transform:uppercase;}
+.prob-card p{font-size:12px;color:#64748b;line-height:1.6;margin-top:4px;}
+.how-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+.hstep{text-align:center;position:relative;}
+.hstep:not(:last-child)::after{content:'→';position:absolute;right:-12px;top:26px;font-size:18px;color:#c4b5fd;font-weight:300;}
+.hcircle{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#1e3a8a,#7c3aed);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:26px;box-shadow:0 6px 18px rgba(124,58,237,.35);position:relative;}
+.hnum{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:#f97316;color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.hstep h3{font-size:11px;font-weight:800;color:#1e3a8a;letter-spacing:.06em;margin-bottom:4px;}
+.hstep p{font-size:11px;color:#64748b;line-height:1.5;}
+.cat-sec{background:linear-gradient(135deg,#0f172a,#1e3a8a);}
+.cat-sec .sec-title{color:#fff;}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.ccard{border-radius:14px;overflow:hidden;height:140px;position:relative;cursor:pointer;}
+.cbg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:46px;transition:transform .4s;}
+.ccard:hover .cbg{transform:scale(1.08);}
+.g1{background:linear-gradient(135deg,#1e3a8a,#3b82f6,#7c3aed);}
+.g2{background:linear-gradient(135deg,#065f46,#10b981,#34d399);}
+.g3{background:linear-gradient(135deg,#7c2d12,#f97316,#fbbf24);}
+.g4{background:linear-gradient(135deg,#881337,#e11d48,#fb7185);}
+.clbl{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent);padding:16px 12px 8px;font-size:12px;font-weight:800;color:#fff;}
+.clbl span{font-size:10px;color:rgba(255,255,255,.6);display:block;margin-bottom:2px;}
+.tips-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.tcard{background:#fff;border-radius:14px;padding:24px 20px;border-top:3.5px solid;box-shadow:0 3px 10px rgba(30,58,138,.07);transition:all .25s;}
+.tcard:hover{transform:translateY(-4px);}
+.tcard:nth-child(1){border-color:#7c3aed;}.tcard:nth-child(2){border-color:#f97316;}.tcard:nth-child(3){border-color:#22c55e;}
+.ticon{font-size:28px;margin-bottom:10px;}
+.tcard h3{font-size:14px;font-weight:800;color:#0f172a;margin-bottom:6px;}
+.tcard p{font-size:13px;color:#64748b;line-height:1.7;}
+.bottom-sec{display:grid;grid-template-columns:1fr 1fr;gap:60px;padding:80px 5%;background:#fff;align-items:start;}
+.bottom-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+.about-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.alogo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#1e3a8a,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:22px;}
+.atitle{font-size:16px;font-weight:900;color:#0f172a;}.atitle span{font-size:10px;color:#7c3aed;font-weight:700;letter-spacing:.1em;display:block;margin-top:2px;}
+.about-block p{font-size:14px;color:#64748b;line-height:1.85;margin-bottom:12px;}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.badge{background:#eef2ff;border:1px solid #bfdbfe;border-radius:12px;padding:4px 10px;font-size:11px;font-weight:700;color:#1e3a8a;}
+.cblock h2{font-size:20px;font-weight:900;color:#0f172a;margin-bottom:6px;}
+.cline{width:50px;height:2.5px;border-radius:2px;background:linear-gradient(90deg,#7c3aed,#f97316);margin-bottom:20px;}
+.field{display:flex;align-items:center;gap:10px;background:#f8faff;border:1.5px solid #e0e7ff;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#94a3b8;}
+.fi{font-size:16px;color:#7c3aed;}
+.mfield{align-items:flex-start;height:70px;}
+.sbtn{width:100%;padding:13px;background:linear-gradient(135deg,#1e3a8a,#7c3aed);color:#fff;border-radius:10px;border:none;font-size:13px;font-weight:800;letter-spacing:.08em;text-align:center;cursor:pointer;transition:all .25s;margin-top:8px;font-family:'Poppins',sans-serif;}
+.sbtn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,.4);}
+footer{background:#0f172a;display:flex;align-items:center;justify-content:space-between;padding:22px 5%;border-top:1px solid rgba(124,58,237,.25);}
+.fl{color:#64748b;font-size:12px;}.fc{color:#fbbf24;font-size:13px;font-weight:800;}.fr{color:#64748b;font-size:12px;}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.show{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <span style="font-size:22px">🔍</span>
+      <div><div class="logo-name">Lost & Found</div><div class="logo-sub">SRKIT · VIJAYAWADA</div></div>
+    </div>
+    <div class="nav-links">
+      <a href="#hero" class="active">HOME</a>
+      <a href="#problems">PROBLEMS</a>
+      <a href="#how">HOW IT WORKS</a>
+      <a href="#categories">CATEGORIES</a>
+      <a href="#about">ABOUT</a>
+      <a href="#contact">CONTACT</a>
+      <a href="website.html" class="nav-cta">🌐 GO TO WEBSITE</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" id="hero">
+  <div style="position:relative;z-index:2;">
+    <div class="eyebrow">🔍 SRK Institute of Technology</div>
+    <h1>Lost Something<br/>on <span>Campus?</span></h1>
+    <div class="hero-sub">We'll Help You Find It.</div>
+    <p class="hero-desc">A secure, verified digital portal for SRKIT students and staff to report lost items, post found belongings, and reconnect them with their owners — fast.</p>
+    <div class="hero-btns">
+      <a href="website.html" class="btn-p">🔍 Browse Items</a>
+      <a href="website.html" class="btn-o">+ Report Lost Item</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="ftag" style="top:10px;right:260px;"><div class="tdot" style="background:#ef4444"></div>HP Laptop — Lost!</div>
+    <div class="ftag" style="bottom:30px;right:255px;"><div class="tdot" style="background:#22c55e"></div>ID Card — Found ✓</div>
+    <div class="phone-mock">
+      <div class="ph-hdr"><div class="pt">🔍 LOST & FOUND</div><div class="ps">SRKIT Campus Portal</div></div>
+      <div class="ph-search">🔍 Search items...</div>
+      <div class="pc lost"><div class="pc-top"><span class="pbadge">LOST</span><span class="ptime">2h ago</span></div><div class="ptitle">💻 HP Laptop</div><div class="ploc">📍 Main Library</div><div class="pph">📞 +91 98765 43210</div></div>
+      <div class="pc found"><div class="pc-top"><span class="pbadge">FOUND</span><span class="ptime">5h ago</span></div><div class="ptitle">🪪 Student ID Card</div><div class="ploc">📍 Canteen</div><div class="pph">📞 +91 87654 32109</div></div>
+      <div class="pc lost"><div class="pc-top"><span class="pbadge">LOST</span><span class="ptime">1d ago</span></div><div class="ptitle">🔑 Car Keys</div><div class="ploc">📍 Parking Lot A</div><div class="pph">📞 +91 76543 21098</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="problems" style="background:linear-gradient(180deg,#eff6ff,#e0e7ff);">
+  <div class="sec-inner">
+    <div class="reveal">
+      <span class="sec-tag">Common on Campus</span>
+      <h2 class="sec-title">What Gets Lost Most?</h2>
+      <p class="sec-desc">Identified from common student experiences at SRKIT campus.</p>
+    </div>
+    <div class="prob-grid reveal">
+      <div class="prob-card"><div class="prob-img" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">💻</div><div class="prob-body"><div class="prob-icon-row"><div class="prob-ico">📱</div><h3>Electronics</h3></div><p>Laptops, phones, earbuds and chargers left in libraries and computer labs.</p></div></div>
+      <div class="prob-card"><div class="prob-img" style="background:linear-gradient(135deg,#5b21b6,#a78bfa)">🎒</div><div class="prob-body"><div class="prob-icon-row"><div class="prob-ico">🎒</div><h3>Bags & Books</h3></div><p>Backpacks and textbooks left behind in classrooms and canteen.</p></div></div>
+      <div class="prob-card"><div class="prob-img" style="background:linear-gradient(135deg,#b91c1c,#f87171)">🔑</div><div class="prob-body"><div class="prob-icon-row"><div class="prob-ico">🪪</div><h3>Keys & ID Cards</h3></div><p>Student IDs and room keys misplaced causing major inconvenience.</p></div></div>
+      <div class="prob-card"><div class="prob-img" style="background:linear-gradient(135deg,#0369a1,#38bdf8)">👛</div><div class="prob-body"><div class="prob-icon-row"><div class="prob-ico">💳</div><h3>Wallets & Cards</h3></div><p>Wallets with cash and ATM cards dropped in canteen or parking area.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="how" style="background:#fff;">
+  <div class="sec-inner">
+    <div class="reveal">
+      <span class="sec-tag">Simple Process</span>
+      <h2 class="sec-title">How It Works</h2>
+      <p class="sec-desc">From registration to item recovery in 5 simple steps.</p>
+    </div>
+    <div class="how-grid reveal">
+      <div class="hstep"><div class="hcircle">📱<div class="hnum">1</div></div><h3>REGISTER</h3><p>Sign up with Indian mobile number. OTP verified.</p></div>
+      <div class="hstep"><div class="hcircle">📋<div class="hnum">2</div></div><h3>POST ITEM</h3><p>Report lost or found with photo & location.</p></div>
+      <div class="hstep"><div class="hcircle">🔍<div class="hnum">3</div></div><h3>SEARCH</h3><p>Browse by category, location or keyword.</p></div>
+      <div class="hstep"><div class="hcircle">📞<div class="hnum">4</div></div><h3>CONTACT</h3><p>Call poster directly via public number.</p></div>
+      <div class="hstep"><div class="hcircle">🎉<div class="hnum">5</div></div><h3>REUNITE</h3><p>Collect item & mark listing resolved!</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec cat-sec" id="categories">
+  <div class="sec-inner">
+    <div class="reveal">
+      <span class="sec-tag" style="color:#fbbf24">Browse by Category</span>
+      <h2 class="sec-title">What Are You Looking For?</h2>
+      <p class="sec-desc" style="color:#bfdbfe">Search by item type to find what you lost faster.</p>
+    </div>
+    <div class="cat-grid reveal">
+      <div class="ccard"><div class="cbg g1">💻</div><div class="clbl"><span>ELECTRONICS</span>Laptops · Phones · Earbuds</div></div>
+      <div class="ccard"><div class="cbg g2">🎒</div><div class="clbl"><span>BAGS & BOOKS</span>Backpacks · Textbooks</div></div>
+      <div class="ccard"><div class="cbg g3">🔑</div><div class="clbl"><span>KEYS & ID CARDS</span>Room Keys · Student IDs</div></div>
+      <div class="ccard"><div class="cbg g4">💍</div><div class="clbl"><span>JEWELLERY & WALLET</span>Rings · Wallets · Cards</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="background:linear-gradient(180deg,#eff6ff,#f0f4ff);">
+  <div class="sec-inner">
+    <div class="reveal">
+      <span class="sec-tag">Helpful Tips</span>
+      <h2 class="sec-title">Increase Your Chances</h2>
+      <p class="sec-desc">Simple tips to help recover your belongings faster.</p>
+    </div>
+    <div class="tips-grid reveal">
+      <div class="tcard"><div class="ticon">📸</div><h3>Add a Clear Photo</h3><p>Listings with photos get 3x more responses. Upload front and back if possible.</p></div>
+      <div class="tcard"><div class="ticon">📍</div><h3>Be Specific on Location</h3><p>Mention exact spot like "Library 2nd floor near window" not just "Library".</p></div>
+      <div class="tcard"><div class="ticon">⚡</div><h3>Report Immediately</h3><p>Post within hours of losing. The sooner it's live, the better the recovery chance.</p></div>
+    </div>
+  </div>
+</section>
+
+<div style="background:#fff;padding:70px 5%;" id="about">
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;">
+    <div class="reveal">
+      <div class="about-head">
+        <div class="alogo">🔍</div>
+        <div><div class="atitle">About Project<span>LOST & FOUND PORTAL</span></div></div>
+      </div>
+      <p>The Lost & Found Portal is a digital initiative by the Dept. of CSE at SRK Institute of Technology, Vijayawada. Students and staff can report and recover misplaced belongings securely using their Indian phone numbers.</p>
+      <p>All posts include public contact details and auto-expire after 30 days to stay fresh and relevant for the campus community.</p>
+      <div class="badges">
+        <span class="badge">📱 Phone Login</span>
+        <span class="badge">🗓️ 30-Day Expiry</span>
+        <span class="badge">📞 Public Contact</span>
+        <span class="badge">⚙️ Admin Panel</span>
+        <span class="badge">🆓 Free to Use</span>
+      </div>
+    </div>
+    <div class="reveal" id="contact">
+      <h2 class="cblock" style="font-size:20px;font-weight:900;color:#0f172a;margin-bottom:6px;">Contact Us</h2>
+      <div class="cline"></div>
+      <div class="field"><span class="fi">👤</span> Your Full Name</div>
+      <div class="field"><span class="fi">✉️</span> Your Email Address</div>
+      <div class="field"><span class="fi">📱</span> Your Mobile Number (+91)</div>
+      <div class="field mfield"><span class="fi" style="margin-top:2px">💬</span> Your Message</div>
+      <button class="sbtn" onclick="alert('Message sent! Thank you.')">SEND MESSAGE →</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span class="fl">🔍 Lost & Found · SRKIT, Vijayawada</span>
+  <span class="fc">Find What Matters</span>
+  <span class="fr">© 2025 SRK Institute of Technology</span>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); } });
+},{threshold:0.12});
+reveals.forEach(r=>obs.observe(r));
+const secs = document.querySelectorAll('[id]');
+const links = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{ if(window.scrollY>=s.offsetTop-90) cur=s.id; });
+  links.forEach(a=>{ a.classList.toggle('active',a.getAttribute('href')==='#'+cur); });
+});
+</script>
+</body>
+</html>
