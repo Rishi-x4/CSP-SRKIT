@@ -1,11 +1,11 @@
-# 🔍 AI-Powered Visual Item Recovery System
+# 🔍 Visual Item Recovery System
 
 > A secure digital platform for students and staff of SRKIT Vijayawada to report and reclaim lost items on campus.
 
 ---
 ## 📌 About the Project
 
-The **AI-Powered Visual Item Recovery System** is a digital initiative by the Department of CSE-AIML at SRK Institute of Technology. Students and staff can report lost or found items, browse listings, and connect with each other to return belongings — all within a secure, campus-only environment using Indian phone numbers.
+The **Visual Item Recovery System** is a digital initiative by the Department of CSE-AIML at SRK Institute of Technology. Students and staff can report lost or found items, browse listings, and connect with each other to return belongings — all within a secure, campus-only environment using Indian phone numbers.
 
 ---
 ## ✨ Features
