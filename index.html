@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AI-Powered Visual Item Recovery System</title>
+<title>Visual Item Recovery System</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -143,7 +143,7 @@ textarea.inp{resize:vertical;min-height:80px}
     <div class="nav-logo" onclick="navigate('home')">
       <span style="font-size:22px">🔍</span>
       <div>
-        <div class="nav-logo-name">AI-Powered Visual Item Recovery System</div>
+        <div class="nav-logo-name">Visual Item Recovery System</div>
         <div class="nav-logo-sub">VIJAYAWADA</div>
       </div>
     </div>
@@ -264,7 +264,7 @@ function render(){
 function renderLanding(){
   return '<div class="landing">'
     +'<div class="landing-icon">🔍</div>'
-    +'<h1>AI-Powered Visual Item Recovery System</h1>'
+    +'<h1>Visual Item Recovery System</h1>'
     +'<p class="landing-sub">Vijayawada</p>'
     +'<p class="landing-desc">A secure digital platform to report and reclaim lost items on campus.</p>'
     +'<div class="landing-btns">'
@@ -362,7 +362,7 @@ function renderHome(){
   var lostN=active.filter(function(p){return p.type==='lost';}).length;
   var foundN=active.filter(function(p){return p.type==='found';}).length;
   var html='<div class="home-banner"><div class="banner-inner">'
-    +'<div class="banner-title">AI-Powered Visual Item Recovery System</div>'
+    +'<div class="banner-title">Visual Item Recovery System</div>'
     +'<div class="banner-sub">Vijayawada</div><div class="banner-stats">'
     +'<div class="stat-box"><div class="stat-num">'+lostN+'</div><div class="stat-lbl">Lost Items</div></div>'
     +'<div class="stat-box"><div class="stat-num">'+foundN+'</div><div class="stat-lbl">Found Items</div></div>'
